@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Mail, 
@@ -106,73 +105,66 @@ export default function App() {
   const t = translations[lang];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/portfolio');
-        setData(response.data);
-      } catch (error) {
-        setData({
-          profile: {
-            name: "Mauricio Lagos",
-            title: lang === 'es' ? "Desarrollador de Software | Especialista en .NET & Blazor" : "Software Developer | .NET & Blazor Specialist",
-            location: "Talcahuano, Chile",
-            summary: lang === 'es' 
-              ? "Más de 2 años de experiencia como Desarrollador de Software especializado en .NET y Blazor. En Koff & Guerrero lideré la creación de una plataforma unificada de componentes en Blazor, integrando librerías como Syncfusion y aplicando prácticas de CI/CD en Azure DevOps. Mi perfil combina experiencia técnica en backend y frontend con una fuerte orientación a la mejora continua y la experiencia de usuario."
-              : "Over 2 years of experience as a Software Developer specializing in .NET and Blazor. At Koff & Guerrero, I led the creation of a unified Blazor component platform, integrating libraries like Syncfusion and applying CI/CD practices in Azure DevOps. My profile combines technical expertise in backend and frontend with a strong focus on continuous improvement and user experience.",
-            email: "mauricioelb@hotmail.com",
-            linkedIn: "linkedin.com/in/maudev2",
-            phone: "+56940555937"
-          },
-          experiences: [
-            { 
-              company: "Koff & Guerrero Consultants", 
-              role: lang === 'es' ? "Ingeniero Programador" : "Software Engineer", 
-              period: lang === 'es' ? "May 2023 – Ene 2025" : "May 2023 – Jan 2025", 
-              location: "Santiago, Chile",
-              responsibilities: lang === 'es' ? [
-                "Desarrollo de plataforma unificada en Blazor con Syncfusion y MudBlazor.",
-                "Implementación de pipelines CI/CD en Azure DevOps.",
-                "Optimización de rendimiento y estabilidad en aplicaciones .NET.",
-                "Gestión y optimización de bases de datos SQL Server.",
-                "Visualización de datos con Power BI."
-              ] : [
-                "Development of a unified Blazor platform with Syncfusion and MudBlazor.",
-                "Implementation of CI/CD pipelines in Azure DevOps.",
-                "Performance and stability optimization in .NET applications.",
-                "SQL Server database management and optimization.",
-                "Data visualization with Power BI."
-              ]
-            },
-            { 
-              company: "Serviphar", 
-              role: lang === 'es' ? "Desarrollador .NET" : ".NET Developer", 
-              period: lang === 'es' ? "Jul 2025 – Sep 2025" : "July 2025 – Sept 2025", 
-              location: "Santiago, Chile",
-              responsibilities: lang === 'es' ? [
-                "Optimización de bases de datos para búsquedas complejas.",
-                "Desarrollo de aplicaciones en C# con .NET Framework 4.6.",
-                "Implementación de funcionalidades con JavaScript, AJAX y JQuery."
-              ] : [
-                "Database optimization for complex searches.",
-                "Application development in C# with .NET Framework 4.6.",
-                "Implementation of features with JavaScript, AJAX, and JQuery."
-              ]
-            }
-          ],
-          skills: [
-            { category: lang === 'es' ? "Backend & ORM" : "Backend & ORM", items: ["C#", ".NET Core", ".NET Framework", "Entity Framework", "Dapper", "Python"] },
-            { category: lang === 'es' ? "Desarrollo Frontend" : "Frontend Development", items: ["React", "Blazor", "TypeScript", "JavaScript", "Bootstrap"] },
-            { category: lang === 'es' ? "IA & Automatización" : "AI & Automation", items: ["Integración con IA", "Claude Code", "Gemini"] },
-            { category: lang === 'es' ? "Ingeniería de Datos" : "Data Engineering", items: ["SQL Server", "MySQL", "Procesos ETL", "Pandas", "Power BI"] },
-            { category: lang === 'es' ? "DevOps & Nube" : "DevOps & Cloud", items: ["Azure DevOps", "Git", "GitHub"] },
-            { category: lang === 'es' ? "Diseño & Gestión" : "Design & Management", items: ["Tailwind CSS", "Syncfusion", "Jira", "Trello"] }
+    const staticData: PortfolioData = {
+      profile: {
+        name: "Mauricio Lagos",
+        title: lang === 'es' ? "Desarrollador de Software | Especialista en .NET & Blazor" : "Software Developer | .NET & Blazor Specialist",
+        location: "Talcahuano, Chile",
+        summary: lang === 'es' 
+          ? "Más de 2 años de experiencia como Desarrollador de Software especializado en .NET y Blazor. En Koff & Guerrero lideré la creación de una plataforma unificada de componentes en Blazor, integrando librerías como Syncfusion y aplicando prácticas de CI/CD en Azure DevOps. Mi perfil combina experiencia técnica en backend y frontend con una fuerte orientación a la mejora continua y la experiencia de usuario."
+          : "Over 2 years of experience as a Software Developer specializing in .NET and Blazor. At Koff & Guerrero, I led the creation of a unified Blazor component platform, integrating libraries like Syncfusion and applying CI/CD practices in Azure DevOps. My profile combines technical expertise in backend and frontend with a strong focus on continuous improvement and user experience.",
+        email: "mauricioelb@hotmail.com",
+        linkedIn: "linkedin.com/in/maudev2",
+        phone: "+56940555937"
+      },
+      experiences: [
+        { 
+          company: "Koff & Guerrero Consultants", 
+          role: lang === 'es' ? "Ingeniero Programador" : "Software Engineer", 
+          period: lang === 'es' ? "May 2023 – Ene 2025" : "May 2023 – Jan 2025", 
+          location: "Santiago, Chile",
+          responsibilities: lang === 'es' ? [
+            "Desarrollo de plataforma unificada en Blazor con Syncfusion y MudBlazor.",
+            "Implementación de pipelines CI/CD en Azure DevOps.",
+            "Optimización de rendimiento y estabilidad en aplicaciones .NET.",
+            "Gestión y optimización de bases de datos SQL Server.",
+            "Visualización de datos con Power BI."
+          ] : [
+            "Development of a unified Blazor platform with Syncfusion and MudBlazor.",
+            "Implementation of CI/CD pipelines in Azure DevOps.",
+            "Performance and stability optimization in .NET applications.",
+            "SQL Server database management and optimization.",
+            "Data visualization with Power BI."
           ]
-        });
-      } finally {
-        setLoading(false);
-      }
+        },
+        { 
+          company: "Serviphar", 
+          role: lang === 'es' ? "Desarrollador .NET" : ".NET Developer", 
+          period: lang === 'es' ? "Jul 2025 – Sep 2025" : "July 2025 – Sept 2025", 
+          location: "Santiago, Chile",
+          responsibilities: lang === 'es' ? [
+            "Optimización de bases de datos para búsquedas complejas.",
+            "Desarrollo de aplicaciones en C# con .NET Framework 4.6.",
+            "Implementación de funcionalidades con JavaScript, AJAX y JQuery."
+          ] : [
+            "Database optimization for complex searches.",
+            "Application development in C# with .NET Framework 4.6.",
+            "Implementation of features with JavaScript, AJAX, and JQuery."
+          ]
+        }
+      ],
+      skills: [
+        { category: lang === 'es' ? "Backend & ORM" : "Backend & ORM", items: ["C#", ".NET Core", ".NET Framework", "Entity Framework", "Dapper", "Python"] },
+        { category: lang === 'es' ? "Desarrollo Frontend" : "Frontend Development", items: ["React", "Blazor", "TypeScript", "JavaScript", "Bootstrap"] },
+        { category: lang === 'es' ? "IA & Automatización" : "AI & Automation", items: ["Integración con IA", "Claude Code", "Gemini"] },
+        { category: lang === 'es' ? "Ingeniería de Datos" : "Data Engineering", items: ["SQL Server", "MySQL", "Procesos ETL", "Pandas", "Power BI"] },
+        { category: lang === 'es' ? "DevOps & Nube" : "DevOps & Cloud", items: ["Azure DevOps", "Git", "GitHub"] },
+        { category: lang === 'es' ? "Diseño & Gestión" : "Design & Management", items: ["Tailwind CSS", "Syncfusion", "Jira", "Trello"] }
+      ]
     };
-    fetchData();
+    
+    setData(staticData);
+    setLoading(false);
   }, [lang]);
 
   if (loading || !data) {
